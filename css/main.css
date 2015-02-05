@@ -62,6 +62,9 @@ hr {
 input, select {
   vertical-align: middle; }
 
+/**
+ * Začátek mých stylů <-- TOTO TĚ ZAJÍMÁ
+**/
 Body {
   font-size: 16;
   background: #f3f3f3; }
