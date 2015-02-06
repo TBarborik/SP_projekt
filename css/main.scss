@@ -1,13 +1,25 @@
 @import 'variables';
-@import 'reset';
 
 /**
  * Začátek mých stylů <-- TOTO TĚ ZAJÍMÁ
 **/
 
 Body {
+  font-family: $defaultFontFamily;
   font-size: $defaultFontSize;
-  background: $greyColor;
+  background: $pageBackground;
+}
+
+H1, H2, H3, H4, H5, H6 {
+  font-weight: lighter;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.center {
+  text-align: center;
 }
 
 #wrapper {
@@ -15,14 +27,40 @@ Body {
   width: 100%;
   margin: 0 auto;
 
-  header {
+  & > header {
     height: 10rem;
-    background: blue;
-    background: url('../obrazky/header-background.png') left bottom no-repeat;
   }
 
-  nav {
+  & > nav {
+    display: table;
+    width: 100%;
+    margin-bottom: 1rem;
 
+    .items {
+      display: table-row;
+      width: 100%;
+
+      a {
+        display: table-cell;
+        text-align: center;
+        border-bottom: 2px solid $blueColor;
+        text-decoration: none;
+        color: black;
+        font-size: 1.2rem;
+        padding: .25rem .4rem;
+        transition: all .5s ease;
+
+        &:hover {
+          background: $blueColor;
+        }
+
+        &.active {
+          background: $darkBlueColor;
+          border-bottom: $darkBlueColor;
+          color: white
+        }
+      }
+    }
   }
 
   #main {
@@ -35,17 +73,40 @@ Body {
 
     ul {
       list-style: none;
+      border: 2px solid $darkBlueColor;
+      background: white;
+      border-radius: $defaultBorderRadius;
+      padding-left: 0px;
+      margin-top: 0;
+
+      li {
+        padding: .25rem
+      }
+
+      li:first-child {
+        background: $darkBlueColor;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: $pageBackground;
+      }
     }
 
   }
 
   #content {
+    padding: 0 0 0 1rem;
+
+    H1:first-of-type {
+      margin-top: 0;
+    }
 
   }
 
-  footer {
-    border-top: 1px solid green;
-    padding-top: 5px;
+  & > footer {
+    border-top: 1px solid $darkBlueColor;
+    padding: .3125rem;
+    background: $blueColor;
   }
 
 }
