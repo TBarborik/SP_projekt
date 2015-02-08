@@ -149,7 +149,11 @@ table.form {
       padding-left: 0px;
       margin-top: 0; }
       #wrapper #strip ul li {
-        padding: 0.25rem; }
+        padding: .25rem; }
+        #wrapper #strip ul li a {
+          display: block; }
+          #wrapper #strip ul li a:hover {
+            padding-left: .5rem; }
       #wrapper #strip ul li:first-child {
         background: #0099CC;
         text-align: center;

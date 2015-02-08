@@ -208,7 +208,15 @@ table.form {
       margin-top: 0;
 
       li {
-        padding: .25rem
+        padding: .25rem;
+
+        a {
+          display: block;
+
+          &:hover {
+            padding-left: .5rem;
+          }
+        }
       }
 
       li:first-child {
