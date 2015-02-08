@@ -84,6 +84,18 @@ a {
   text-align: right;
 }
 
+.left {
+  text-align: left;
+}
+
+.to-left {
+  float: left;
+}
+
+.to-right {
+  float: right;
+}
+
 .img-left {
   float: left;
   margin: .5rem .5rem .5rem 0rem
@@ -92,6 +104,10 @@ a {
 .img-right {
   float: right;
   margin: .5rem .5rem .5rem 0rem
+}
+
+.clear {
+  clear: both
 }
 
 table.form {
@@ -219,6 +235,10 @@ table.form {
     border-top: 2px solid $defaultDarkColor;
     padding: .3125rem;
     background: lighten($defaultColor, 30);
+
+    p {
+      margin: 0;
+    }
   }
 
 }

@@ -63,6 +63,15 @@ a {
 .right {
   text-align: right; }
 
+.left {
+  text-align: left; }
+
+.to-left {
+  float: left; }
+
+.to-right {
+  float: right; }
+
 .img-left {
   float: left;
   margin: 0.5rem 0.5rem 0.5rem 0rem; }
@@ -70,6 +79,9 @@ a {
 .img-right {
   float: right;
   margin: 0.5rem 0.5rem 0.5rem 0rem; }
+
+.clear {
+  clear: both; }
 
 table.form {
   width: 100%; }
@@ -152,5 +164,7 @@ table.form {
     border-top: 2px solid #0099CC;
     padding: .3125rem;
     background: #bbe6f6; }
+    #wrapper > footer p {
+      margin: 0; }
 
 /*# sourceMappingURL=main.css.map */
