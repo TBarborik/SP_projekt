@@ -1,9 +1,21 @@
+// Android colors
+$androidBlue: #33B5E5;
+$androidDarkBlue: #0099CC;
+$androidPurple: #AA66CC;
+$androidDarkPurple: #9933CC;
+$androidGreen: #99CC00;
+$androidDarkGreen: #669900;
+$androidOrange: #FFBB33;
+$androidDarkOrange: #FF8800;
+$androidRed: #FF4444;
+$androidDarkRed: #CC0000;
+
+// Site variables
 $defaultFontFamily : 'Calibri', sans-serif;
-$defaultFontSize : 16px;
 $defaultBorderRadius: 4px;
-$greyColor : #f3f3f3;
-$blueColor: #9abbff;
-$darkBlueColor: #4d78ff;
-$greenColor: #06a11c;
+$greyColor: #f3f3f3;
+$defaultColor: $androidBlue;
+$defaultDarkColor: $androidDarkBlue;
+
 
 $pageBackground : $greyColor;

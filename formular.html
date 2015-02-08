@@ -3,7 +3,7 @@
 <head>
     <meta charset='utf-8'>
     <link href="css/main.css" rel="stylesheet" media="all" type="text/css">
-    <title>Uvodni stranka</title>
+    <title>Project site &bull; Question</title>
 </head>
 <body>
 <div id="wrapper">
@@ -13,29 +13,81 @@
     <nav>
         <div class="items">
             <a href="index.html">Úvodní strana</a>
-            <a href="#">1. inf strana</a>
-            <a href="#">1. inf strana</a>
-            <a href="#">1. inf strana</a>
-            <a href="#">1. inf strana</a>
-            <a href="#">1. inf strana</a>
-            <a href="#">1. inf strana</a>
+            <a href="inf1.html">1. inf strana</a>
+            <a href="inf2.html">2. inf strana</a>
+            <a href="inf3.html">3. inf strana</a>
+            <a href="inf4.html">4. inf strana</a>
             <a href="formular.html" class="active">Formulář</a>
         </div>
     </nav>
     <div id="main">
         <div id="strip">
             <ul>
-                <li>Pás tvořivosti</li>
-                <li>Nějaký nápad?</li>
-                <li>Tady teda rozhodně není!</li>
+                <li>Účet</li>
+                <li>Přihlásit</li>
+                <li>Registrovat</li>
+            </ul>
+            <ul>
+                <li>Sledujte nás</li>
+                <li>Google+</li>
+                <li>Facebook</li>
+                <li>Twitter</li>
             </ul>
         </div>
         <div id="content">
-            <h1>Diskuse</h1>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis faucibus tellus, ac sollicitudin enim. Duis vulputate lacus ex, a auctor mauris tincidunt id. Etiam eget rutrum arcu, quis elementum justo. Donec porta mauris eget varius pretium. Praesent quis eros quam. Maecenas quis egestas nunc. Donec ut ipsum magna. Proin malesuada faucibus nulla at dapibus.
-            </p>
-            <img src="obrazky/binary-joke.jpg" alt="binary joke">
+            <h1>Dotaz</h1>
+            <form action="?" method="post">
+                <table class="form">
+                    <tbody>
+                    <tr>
+                        <td><label for="question-name">Jméno: </label></td>
+                        <td><input type="text" name="question[name]" id="question-name" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="question-email">Email: </label></td>
+                        <td><input type="email" name="question[email]" id="question-email" required></td>
+                    </tr>
+                    <tr>
+                        <td><label>Pohlaví: </label></td>
+                        <td>
+                            <label for="question-sex-male">Muž</label> <input type="radio" name="question[sex]" value="male" id="question-sex-male">
+                            <label for="question-sex-female">Žena</label> <input type="radio" name="question[sex]" value="female" id="question-sex-female">
+                            <label for="question-sex-else">Jiné</label> <input type="radio" name="question[sex]" value="else" id="question-sex-else">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="question-delivery">Typ doručení: </label></td>
+                        <td>
+                            <select name="question[delivery]" id="question-delivery">
+                                <option value="1" selected>E-mail</option>
+                                <option value="2">SMS</option>
+                                <option value="3">Česká pošta</option>
+                                <option value="4">Zásilkovna</option>
+                                <option value="5">PPL</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="question-back">Kontaktovat: </label></td>
+                        <td><input type="checkbox" name="question[back]" id="question-back"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <textarea name="question[text]" placeholder="Dotaz..." required></textarea>
+                         </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="2" class="right">
+                            <button type="reset" class="join-right">Vynulovat</button>
+                            <button type="submit">Odeslat</button>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </form>
         </div>
     </div>
     <footer>

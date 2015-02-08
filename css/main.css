@@ -3,8 +3,9 @@
 **/
 Body {
   font-family: "Calibri", sans-serif;
-  font-size: 16px;
-  background: #f3f3f3; }
+  background: #f3f3f3;
+  padding: 0;
+  margin: 0; }
 
 H1, H2, H3, H4, H5, H6 {
   font-weight: lighter; }
@@ -12,15 +13,93 @@ H1, H2, H3, H4, H5, H6 {
 * {
   box-sizing: border-box; }
 
+label {
+  padding-right: .25rem; }
+
+input, textarea, select {
+  padding: .3rem;
+  font-family: inherit;
+  border-width: 0px;
+  margin-bottom: 5px;
+  background: #ebebeb;
+  color: #595959; }
+  input:focus, input:hover, textarea:focus, textarea:hover, select:focus, select:hover {
+    outline: none;
+    background: white;
+    color: black; }
+
+button {
+  background: #33B5E5;
+  color: black;
+  padding: .5rem 1rem;
+  border: 0;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold; }
+  button:hover, button:focus, button:active {
+    background: #0099CC; }
+  button + button {
+    margin-left: 0.5rem; }
+
+button, textarea, input:not([type='checkbox']):not([type='radio']), select {
+  -webkit-box-shadow: 0 0px 1px 1px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 0px 1px 1px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0px 1px 1px rgba(0, 0, 0, 0.25);
+  transition: all .5s; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dotted #0099CC;
+  color: #0099CC;
+  transition: all .5s; }
+  a:hover {
+    color: #004d66;
+    border-color: #004d66; }
+
 .center {
   text-align: center; }
+
+.right {
+  text-align: right; }
+
+.img-left {
+  float: left;
+  margin: 0.5rem 0.5rem 0.5rem 0rem; }
+
+.img-right {
+  float: right;
+  margin: 0.5rem 0.5rem 0.5rem 0rem; }
+
+table.form {
+  width: 100%; }
+  table.form tr td:first-child {
+    width: 15%; }
+    table.form tr td:first-child label {
+      text-align: right;
+      display: block;
+      font-weight: bold; }
+  table.form input:not([type='checkbox']):not([type='radio']), table.form textarea, table.form select {
+    width: 100%; }
+  table.form textarea {
+    height: 10rem; }
 
 #wrapper {
   max-width: 64rem;
   width: 100%;
-  margin: 0 auto; }
+  margin: 0 auto;
+  padding: 0 1rem; }
   #wrapper > header {
-    height: 10rem; }
+    height: 10rem;
+    background: url("../obrazky/header.jpg") left top;
+    color: white;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.4); }
+    #wrapper > header H1 {
+      margin-top: 0;
+      text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      padding: 1.25rem; }
   #wrapper > nav {
     display: table;
     width: 100%;
@@ -31,26 +110,28 @@ H1, H2, H3, H4, H5, H6 {
       #wrapper > nav .items a {
         display: table-cell;
         text-align: center;
-        border-bottom: 2px solid #9abbff;
+        border-bottom: 2px solid #0099CC;
         text-decoration: none;
         color: black;
         font-size: 1.2rem;
         padding: .25rem .4rem;
         transition: all .5s ease; }
         #wrapper > nav .items a:hover {
-          background: #9abbff; }
+          background: #33B5E5; }
         #wrapper > nav .items a.active {
-          background: #4d78ff;
-          border-bottom: #4d78ff;
+          background: #0099CC;
           color: white; }
   #wrapper #main {
     display: flex;
-    padding-bottom: 5px; }
+    margin-bottom: 1rem; }
+    #wrapper #main > * {
+      flex: 1 100%; }
   #wrapper #strip {
-    width: 34rem; }
+    flex: 1 auto;
+    width: 15rem; }
     #wrapper #strip ul {
       list-style: none;
-      border: 2px solid #4d78ff;
+      border: 2px solid #0099CC;
       background: white;
       border-radius: 4px;
       padding-left: 0px;
@@ -58,7 +139,7 @@ H1, H2, H3, H4, H5, H6 {
       #wrapper #strip ul li {
         padding: 0.25rem; }
       #wrapper #strip ul li:first-child {
-        background: #4d78ff;
+        background: #0099CC;
         text-align: center;
         font-weight: bold;
         font-size: 1.2rem;
@@ -68,8 +149,8 @@ H1, H2, H3, H4, H5, H6 {
     #wrapper #content H1:first-of-type {
       margin-top: 0; }
   #wrapper > footer {
-    border-top: 1px solid #4d78ff;
+    border-top: 2px solid #0099CC;
     padding: .3125rem;
-    background: #9abbff; }
+    background: #bbe6f6; }
 
 /*# sourceMappingURL=main.css.map */

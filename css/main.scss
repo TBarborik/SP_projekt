@@ -6,8 +6,9 @@
 
 Body {
   font-family: $defaultFontFamily;
-  font-size: $defaultFontSize;
   background: $pageBackground;
+  padding: 0;
+  margin: 0
 }
 
 H1, H2, H3, H4, H5, H6 {
@@ -18,17 +19,123 @@ H1, H2, H3, H4, H5, H6 {
   box-sizing: border-box;
 }
 
+label {
+  padding-right: .25rem;
+}
+
+input, textarea, select {
+  padding: .3rem;
+  font-family: inherit;
+  border-width: 0px;
+  margin-bottom: 5px;
+  background: rgb(235, 235, 235);
+  color: rgb(89, 89, 89);
+
+  &:focus, &:hover {
+    outline: none;
+    background: white;
+    color: black
+  }
+}
+
+button {
+  background: $defaultColor;
+  color: black;
+  padding: .5rem 1rem;
+  border: 0;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+
+  &:hover, &:focus, &:active {
+    background: $defaultDarkColor;
+  }
+
+  & + button {
+    margin-left: .5rem
+  }
+}
+
+button, textarea, input:not([type='checkbox']):not([type='radio']), select {
+  -webkit-box-shadow: 0 0px 1px 1px rgba(0,0,0,.25);
+  -moz-box-shadow: 0 0px 1px 1px rgba(0,0,0,.25);
+  box-shadow: 0 0px 1px 1px rgba(0,0,0,.25);
+  transition: all .5s;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dotted $defaultDarkColor;
+  color: $defaultDarkColor;
+  transition: all .5s;
+
+  &:hover {
+    color: darken($defaultDarkColor, 20);
+    border-color:  darken($defaultDarkColor, 20);
+  }
+}
+
 .center {
   text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.img-left {
+  float: left;
+  margin: .5rem .5rem .5rem 0rem
+}
+
+.img-right {
+  float: right;
+  margin: .5rem .5rem .5rem 0rem
+}
+
+table.form {
+  width: 100%;
+
+  tr td:first-child {
+    width: 15%;
+
+    label {
+      text-align: right;
+      display: block;
+      font-weight: bold;
+    }
+  }
+
+  input:not([type='checkbox']):not([type='radio']), textarea, select {
+    width: 100%
+  }
+
+  textarea {
+    height: 10rem
+  }
 }
 
 #wrapper {
   max-width: 64rem;
   width: 100%;
   margin: 0 auto;
+  padding: 0 1rem;
 
   & > header {
     height: 10rem;
+    background: url('../obrazky/header.jpg') left top;
+    color: white;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 8px 2px rgba(0,0,0,.4);
+
+    H1 {
+      margin-top: 0;
+      text-shadow: 2px 2px 2px rgba(0,0,0, .4);
+      text-align: center;
+      padding: 1.25rem
+    }
+
   }
 
   & > nav {
@@ -43,7 +150,7 @@ H1, H2, H3, H4, H5, H6 {
       a {
         display: table-cell;
         text-align: center;
-        border-bottom: 2px solid $blueColor;
+        border-bottom: 2px solid $defaultDarkColor;
         text-decoration: none;
         color: black;
         font-size: 1.2rem;
@@ -51,12 +158,11 @@ H1, H2, H3, H4, H5, H6 {
         transition: all .5s ease;
 
         &:hover {
-          background: $blueColor;
+          background: $defaultColor;
         }
 
         &.active {
-          background: $darkBlueColor;
-          border-bottom: $darkBlueColor;
+          background: $defaultDarkColor;
           color: white
         }
       }
@@ -65,15 +171,21 @@ H1, H2, H3, H4, H5, H6 {
 
   #main {
     display: flex;
-    padding-bottom: 5px;
+    margin-bottom: 1rem;
+
+
+    & > * {
+      flex: 1 100%;
+    }
   }
 
   #strip {
-    width: 34rem;
+    flex: 1 auto;
+    width: 15rem;
 
     ul {
       list-style: none;
-      border: 2px solid $darkBlueColor;
+      border: 2px solid $defaultDarkColor;
       background: white;
       border-radius: $defaultBorderRadius;
       padding-left: 0px;
@@ -84,7 +196,7 @@ H1, H2, H3, H4, H5, H6 {
       }
 
       li:first-child {
-        background: $darkBlueColor;
+        background: $defaultDarkColor;
         text-align: center;
         font-weight: bold;
         font-size: 1.2rem;
@@ -104,9 +216,9 @@ H1, H2, H3, H4, H5, H6 {
   }
 
   & > footer {
-    border-top: 1px solid $darkBlueColor;
+    border-top: 2px solid $defaultDarkColor;
     padding: .3125rem;
-    background: $blueColor;
+    background: lighten($defaultColor, 30);
   }
 
 }
