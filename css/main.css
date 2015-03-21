@@ -19,14 +19,15 @@ input, textarea, select {
   border-width: 0px;
   margin-bottom: 5px;
   background: #ebebeb;
-  color: #595959; }
+  color: #595959;
+  box-sizing: border-box; }
   input:focus, input:hover, textarea:focus, textarea:hover, select:focus, select:hover {
     outline: none;
     background: white;
     color: black; }
 
 button {
-  background: #33B5E5;
+  background: #99CC00;
   color: black;
   padding: .5rem 1rem;
   border: 0;
@@ -34,7 +35,7 @@ button {
   text-transform: uppercase;
   font-weight: bold; }
   button:hover, button:focus, button:active {
-    background: #0099CC; }
+    background: #669900; }
   button + button {
     margin-left: 0.5rem; }
 
@@ -47,12 +48,12 @@ button, textarea, input:not([type='checkbox']):not([type='radio']), select {
 a {
   color: inherit;
   text-decoration: none;
-  border-bottom: 1px dotted #0099CC;
-  color: #0099CC;
+  border-bottom: 1px dotted #669900;
+  color: #669900;
   transition: all .5s; }
   a:hover {
-    color: #004d66;
-    border-color: #004d66; }
+    color: #223300;
+    border-color: #223300; }
 
 .center {
   text-align: center; }
@@ -119,16 +120,16 @@ table.form {
       #wrapper > nav .items a {
         display: table-cell;
         text-align: center;
-        border-bottom: 2px solid #0099CC;
+        border-bottom: 2px solid #669900;
         text-decoration: none;
         color: black;
         font-size: 1.2rem;
         padding: .25rem .4rem;
         transition: all .5s ease; }
         #wrapper > nav .items a:hover {
-          background: #33B5E5; }
+          background: #99CC00; }
         #wrapper > nav .items a.active {
-          background: #0099CC;
+          background: #669900;
           color: white; }
   #wrapper #main {
     display: flex;
@@ -140,7 +141,7 @@ table.form {
     width: 15rem; }
     #wrapper #strip ul {
       list-style: none;
-      border: 2px solid #0099CC;
+      border: 2px solid #669900;
       background: white;
       border-radius: 4px;
       padding-left: 0px;
@@ -152,7 +153,7 @@ table.form {
           #wrapper #strip ul li a:hover {
             padding-left: .5rem; }
       #wrapper #strip ul li:first-child {
-        background: #0099CC;
+        background: #669900;
         text-align: center;
         font-weight: bold;
         font-size: 1.2rem;
@@ -162,9 +163,9 @@ table.form {
     #wrapper #content H1:first-of-type {
       margin-top: 0; }
   #wrapper > footer {
-    border-top: 2px solid #0099CC;
+    border-top: 2px solid #669900;
     padding: .3125rem;
-    background: #bbe6f6; }
+    background: #d9ff66; }
     #wrapper > footer p {
       margin: 0; }
 

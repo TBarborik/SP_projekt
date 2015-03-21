@@ -26,6 +26,7 @@ input, textarea, select {
   margin-bottom: 5px;
   background: rgb(235, 235, 235);
   color: rgb(89, 89, 89);
+  box-sizing: border-box;
 
   &:focus, &:hover {
     outline: none;
