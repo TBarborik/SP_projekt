@@ -17,17 +17,33 @@ class Database {
     private static $string = array('string', 'var_string', 'blob');
     private static $date_time = array('date', 'datetime', 'timestamp', 'time', 'year');
 
-    const ASCENDING = 'ASC'; // česky = vzestupně
+    const ASCENDING = 'ASC'; //  česky = vzestupně
     const DESCENDING = 'DESC'; // česky = sestupně
-
+    const TIMEZONE = 'Europe/Prague';
 
     /**
-     * Add config values from config file
+     * Adds config values
+     * @param string $user
+     * @param string $password
+     * @param string $name
+     * @param string $host
+     * @param string $driver
+     */
+    private static function ini_cofig($user, $password, $name, $host, $driver = "mysql") {
+        self::$user = $user;
+        self::$password = $password;
+        self::$name = $name;
+        self::$host = $host;
+        self::$driver = $driver;
+    }
+
+    /**
+     * Adds config values from config file
      * @param string $config_name
      */
     private static function ini_cofig_from_file($config_name = 'database') {
         $path = dirname(__FILE__).DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.$config_name.'.php';
-        $config_array = include($path);
+        $config_array = @include($path);
         foreach ($config_array as $name => $config) {
             self::$$name = $config;
         }
@@ -38,7 +54,7 @@ class Database {
     }
 
     /**
-     * Make connection to DB and than call method if available
+     * Makes connection to DB and than calls method if available
      * @param string $after
      */
     private static function connect($after = '')
@@ -52,7 +68,7 @@ class Database {
     }
 
     /**
-     * Do query
+     * Does query
      * @param string $query
      * @return mixed
      */
@@ -61,31 +77,6 @@ class Database {
         if (is_null(self::$pdo))
             self::connect();
         return self::$pdo->query($query);
-    }
-
-    /**
-     * Selectes all rows and columns from table and returns these
-     * with some restrictions you give it if you want
-     * @param string $table_name
-     * @param array $where
-     * @param int $limit
-     * @param string $order_by
-     * @param string $type
-     * @return array
-     */
-    public static function select_all($table_name, $where = array(), $limit = 0, $order_by = '', $type = self::ASCENDING)
-    {
-        if (is_null(self::$pdo))
-            self::connect();
-
-        $table_name = mysql_real_escape_string($table_name);
-
-        $sql = "SELECT * FROM `$table_name`";
-        self::add_attributes($sql, $where, $limit, $order_by, $type);
-
-        $select = self::$pdo->query($sql);
-
-        return self::process_select($select);
     }
 
     /**
@@ -99,12 +90,11 @@ class Database {
      * @param string $type
      * @return array
      */
-    public static function select($table_name, $col_names, $where = array(), $limit = 0, $order_by = '', $type = self::ASCENDING)
+    public static function select($table_name, $col_names = array(), $where = array(), $limit = 0, $order_by = '', $type = self::ASCENDING)
     {
         if (is_null(self::$pdo))
             self::connect();
         $sql = "SELECT";
-        $table_name = mysql_real_escape_string($table_name);
 
         $first = true;
         foreach ($col_names as $name) {
@@ -113,7 +103,8 @@ class Database {
             $sql .= ' `'.mysql_real_escape_string($name).'`';
             $first = false;
         }
-
+        if (empty($col_names))
+            $sql .= " *";
         $sql .= " FROM `$table_name`";
         self::add_attributes($sql, $where, $limit, $order_by, $type);
 
@@ -124,6 +115,7 @@ class Database {
 
     /**
      * Inserts given values into table
+     * Update: It inserts only values which can be inserted (There're columns for them)
      * @param string $table_name
      * @param array $values
      * @return mixed
@@ -133,29 +125,33 @@ class Database {
         if (is_null(self::$pdo))
             self::connect();
 
-        $table_name = mysql_real_escape_string($table_name);
+        $columns = self::get_columns($table_name);
         $insert_array = array();
         $sql = "INSERT INTO `$table_name` (";
 
         $insert = '';
         $first = true;
-        foreach ($values as $name => $value) {
-            if (!$first) {
-                $sql .= ', ';
-                $insert .= ', ';
+
+        foreach ($columns as $column) {
+            if (isset($values[$column])) {
+                $value = $values[$column];
+                if (!$first) {
+                    $sql .= ', ';
+                    $insert .= ', ';
+                }
+
+                $sql .= "`$column`";
+                $insert .= ":$column";
+
+                if ($value instanceof DateTime) {
+                    $value = $value->format('Y-m-d H:i:s');
+                }
+
+                $insert_array[":$column"] = $value;
+
+                $first = false;
             }
-            $sql .= "`$name`";
-            $insert .= ":$name";
-
-            if ($value instanceof DateTime) {
-                $value = $value->format('Y-m-d H:i:s');
-            }
-
-            $insert_array[":$name"] = $value;
-
-            $first = false;
         }
-
         $sql .= ") VALUES ($insert)";
         $q = self::$pdo->prepare($sql);
         return $q->execute($insert_array);
@@ -176,7 +172,6 @@ class Database {
         if (is_null(self::$pdo))
             self::connect();
 
-        $table_name = mysql_real_escape_string($table_name);
         $update_array = array();
         $sql = "UPDATE `$table_name` SET";
 
@@ -207,19 +202,35 @@ class Database {
      * @param int $limit
      * @param string $order_by
      * @param string $type
-     * @return mixed
+     * @return bool
      */
     public static function delete($table_name, $where = array(), $limit = 0, $order_by = '', $type = self::ASCENDING)
     {
         if (is_null(self::$pdo))
             self::connect();
 
-        $table_name = mysql_real_escape_string($table_name);
         $sql = "DELETE FROM `$table_name`";
         self::add_attributes($sql, $where, $limit, $order_by, $type);
 
         $query = self::$pdo->prepare($sql);
         return $query->execute();
+    }
+
+    /**
+     * Gets column names of table
+     * @param string $table_name
+     * @return array
+     */
+    public static function get_columns($table_name)
+    {
+        if (is_null(self::$pdo))
+            self::connect();
+
+        $sql = "DESCRIBE `$table_name`";
+        $query = self::$pdo->prepare($sql);
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -259,6 +270,7 @@ class Database {
     /**
      * Transforms results of selection to array with key as numbers or column name
      * and makes them data types what they supposed to be
+     * 95% works only with mysql
      * @param $select
      * @param bool $cast
      * @param bool $assoc
@@ -289,7 +301,7 @@ class Database {
                         else
                             $value = (int) $value;
                     elseif (in_array($native, self::$date_time))
-                        $value = new DateTime($value);
+                        $value = new DateTime($value, new DateTimeZone(self::TIMEZONE));
                     elseif (in_array($native, self::$string) || $type == PDO::PARAM_STR)
                         $value = (string) $value;
                     elseif ($type == PDO::PARAM_BOOL)
