@@ -9,9 +9,10 @@ class Database {
     private static $user = null;
     private static $password = null;
     private static $name = null;
-    private static $driver = null;
+    private static $driver = 'mysql';
     private static $host = null;
     private static $pdo = null;
+    private static $timezone = 'GMT';
 
     private static $int = array('longlong', 'long', 'integer', 'int', 'byte', 'int24', 'short', 'tiny');
     private static $string = array('string', 'var_string', 'blob');
@@ -19,7 +20,6 @@ class Database {
 
     const ASCENDING = 'ASC'; //  česky = vzestupně
     const DESCENDING = 'DESC'; // česky = sestupně
-    const TIMEZONE = 'Europe/Prague';
 
     /**
      * Adds config values
@@ -28,13 +28,15 @@ class Database {
      * @param string $name
      * @param string $host
      * @param string $driver
+     * @param string $timezone
      */
-    private static function ini_cofig($user, $password, $name, $host, $driver = "mysql") {
+    private static function ini_cofig($user, $password, $name, $host, $driver = "mysql", $timezone = 'GMT') {
         self::$user = $user;
         self::$password = $password;
         self::$name = $name;
         self::$host = $host;
         self::$driver = $driver;
+        self::$timezone = $timezone;
     }
 
     /**
@@ -46,10 +48,6 @@ class Database {
         $config_array = @include($path);
         foreach ($config_array as $name => $config) {
             self::$$name = $config;
-        }
-
-        if (is_null(self::$driver)) {
-            self::$driver = 'mysql';
         }
     }
 
@@ -86,11 +84,12 @@ class Database {
      * @param array $col_names
      * @param array $where
      * @param int $limit
+     * @param int $offset
      * @param string $order_by
      * @param string $type
      * @return array
      */
-    public static function select($table_name, $col_names = array(), $where = array(), $limit = 0, $order_by = '', $type = self::ASCENDING)
+    public static function select($table_name, $col_names = array(), $where = array(), $limit = 0, $offset = 0, $order_by = '', $type = self::ASCENDING)
     {
         if (is_null(self::$pdo))
             self::connect();
@@ -106,7 +105,7 @@ class Database {
         if (empty($col_names))
             $sql .= " *";
         $sql .= " FROM `$table_name`";
-        self::add_attributes($sql, $where, $limit, $order_by, $type);
+        self::add_attributes($sql, $where, $limit, $offset, $order_by, $type);
 
         $select = self::$pdo->query($sql);
 
@@ -115,7 +114,6 @@ class Database {
 
     /**
      * Inserts given values into table
-     * Update: It inserts only values which can be inserted (There're columns for them)
      * @param string $table_name
      * @param array $values
      * @return mixed
@@ -163,34 +161,38 @@ class Database {
      * @param array $values
      * @param array $where
      * @param int $limit
+     * @param int $offset
      * @param string $order_by
      * @param string $type
      * @return mixed
      */
-    public static function update($table_name, $values, $where = array(), $limit = 0, $order_by = '', $type = self::ASCENDING)
+    public static function update($table_name, $values, $where = array(), $limit = 0, $offset = 0, $order_by = '', $type = self::ASCENDING)
     {
         if (is_null(self::$pdo))
             self::connect();
-
+        $columns = self::get_columns($table_name);
         $update_array = array();
         $sql = "UPDATE `$table_name` SET";
 
         $first = true;
-        foreach ($values as $name => $value) {
-            if (!$first) {
-                $sql .= ',';
+        foreach ($columns as $column) {
+            if (isset($values[$column])) {
+                $value = $values[$column];
+                if (!$first) {
+                    $sql .= ',';
+                }
+                $sql .= " `$column` = ?";
+
+                if ($value instanceof DateTime) {
+                    $value = $value->format('Y-m-d H:i:s');
+                }
+
+                $update_array[] = $value;
+
+                $first = false;
             }
-            $sql .= " `$name` = ?";
-
-            if ($value instanceof DateTime) {
-                $value = $value->format('Y-m-d H:i:s');
-            }
-
-            $update_array[] = $value;
-
-            $first = false;
         }
-        self::add_attributes($sql, $where, $limit, $order_by, $type);
+        self::add_attributes($sql, $where, $limit, $offset, $order_by, $type);
         $q = self::$pdo->prepare($sql);
         return $q->execute($update_array);
     }
@@ -200,17 +202,18 @@ class Database {
      * @param $table_name
      * @param array $where
      * @param int $limit
+     * @param int $offset
      * @param string $order_by
      * @param string $type
      * @return bool
      */
-    public static function delete($table_name, $where = array(), $limit = 0, $order_by = '', $type = self::ASCENDING)
+    public static function delete($table_name, $where = array(), $limit = 0, $offset = 0, $order_by = '', $type = self::ASCENDING)
     {
         if (is_null(self::$pdo))
             self::connect();
 
         $sql = "DELETE FROM `$table_name`";
-        self::add_attributes($sql, $where, $limit, $order_by, $type);
+        self::add_attributes($sql, $where, $limit, $offset, $order_by, $type);
 
         $query = self::$pdo->prepare($sql);
         return $query->execute();
@@ -238,11 +241,12 @@ class Database {
      * @param string $sql
      * @param array $where
      * @param int $limit
+     * @param int $offset
      * @param string $order_by
      * @param string $type
      * @return string
      */
-    private static function add_attributes(&$sql, $where = array(), $limit = 0, $order_by = '', $type = self::ASCENDING)
+    private static function add_attributes(&$sql, $where = array(), $limit = 0, $offset = 0, $order_by = '', $type = self::ASCENDING)
     {
         if (!empty($where)) {
             $sql .= ' WHERE';
@@ -250,7 +254,7 @@ class Database {
             $first = true;
             foreach ($where as $type => $statement) {
                 if (!$first)
-                    if (is_numeric($type))
+                    if (is_numeric($type) || ($type != 'AND' && $type != 'OR'))
                         $sql .= ' AND';
                     else
                         $sql .= ' '.$type;
@@ -264,7 +268,7 @@ class Database {
         if (!empty($order_by))
             $sql .= " ORDER BY $order_by $type";
         if ($limit > 0)
-            $sql .= " LIMIT $limit";
+            $sql .= " LIMIT $offset, $limit";
     }
 
     /**
@@ -301,7 +305,7 @@ class Database {
                         else
                             $value = (int) $value;
                     elseif (in_array($native, self::$date_time))
-                        $value = new DateTime($value, new DateTimeZone(self::TIMEZONE));
+                        $value = new DateTime($value, new DateTimeZone(self::$timezone));
                     elseif (in_array($native, self::$string) || $type == PDO::PARAM_STR)
                         $value = (string) $value;
                     elseif ($type == PDO::PARAM_BOOL)

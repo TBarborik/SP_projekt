@@ -5,5 +5,6 @@ return array(
     'user' => 'root',
     'password' => '',
     'name' => 'test_db',
-    'driver' => 'mysql'
+    'driver' => 'mysql',
+    'timezone' => 'Europe/Prague'
 );
